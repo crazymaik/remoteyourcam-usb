@@ -19,10 +19,6 @@
   android:versionCode="10"
   android:versionName="0.3.0">
 
-  <uses-sdk
-    android:minSdkVersion="12"
-    android:targetSdkVersion="12"/>
-
   <uses-feature android:name="android.hardware.usb.host"/>
 
   <supports-screens
