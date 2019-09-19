@@ -33,8 +33,6 @@ import android.hardware.usb.UsbRequest;
 import android.os.Handler;
 import android.util.Log;
 
-import org.acra.ErrorReporter;
-
 import com.remoteyourcam.usb.AppConfig;
 import com.remoteyourcam.usb.ptp.commands.CloseSessionCommand;
 import com.remoteyourcam.usb.ptp.commands.Command;
@@ -74,7 +72,7 @@ public abstract class PtpCamera implements Camera {
     private static final String TAG = PtpCamera.class.getSimpleName();
 
     private final WorkerThread workerThread = new WorkerThread();
-    private final PtpUsbConnection connection;
+    public final PtpUsbConnection connection;
 
     protected final Handler handler = new Handler();
     protected final LinkedBlockingQueue<PtpAction> queue = new LinkedBlockingQueue<PtpAction>();
@@ -188,13 +186,6 @@ public abstract class PtpCamera implements Camera {
     public void setDeviceInfo(DeviceInfo deviceInfo) {
         if (AppConfig.LOG) {
             Log.i(TAG, deviceInfo.toString());
-        }
-        if (AppConfig.USE_ACRA) {
-            try {
-                ErrorReporter.getInstance().putCustomData("deviceInfo", deviceInfo.toString());
-            } catch (Throwable e) {
-                // no fail
-            }
         }
         this.deviceInfo = deviceInfo;
 
@@ -565,7 +556,9 @@ public abstract class PtpCamera implements Camera {
                 } catch (InterruptedException e) {
                     // nop
                 }
-
+                if (action instanceof  GetObjectHandlesCommand) {
+                    action = action;
+                }
                 if (action != null) {
                     action.exec(this);
                 }
@@ -581,6 +574,9 @@ public abstract class PtpCamera implements Camera {
         public void handleCommand(Command command) {
             if (AppConfig.LOG) {
                 Log.i(TAG, "handling command " + command.getClass().getSimpleName());
+            }
+            if (command instanceof GetObjectHandlesCommand) {
+              command = command;
             }
 
             ByteBuffer b = smallIn;

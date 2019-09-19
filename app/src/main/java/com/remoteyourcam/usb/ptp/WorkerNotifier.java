@@ -33,6 +33,7 @@ public class WorkerNotifier implements Camera.WorkerListener {
         Notification.Builder builder = new Notification.Builder(context);
         builder.setSmallIcon(R.drawable.icon);
         builder.setTicker(context.getString(R.string.worker_ticker));
+        builder.setContentTitle(context.getString(R.string.worker_ticker));
         notification = builder.build();
         uniqueId = NotificationIds.getInstance().getUniqueIdentifier(WorkerNotifier.class.getName() + ":running");
     }

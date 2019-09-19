@@ -15,6 +15,8 @@
  */
 package com.remoteyourcam.usb.ptp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import android.app.PendingIntent;
@@ -27,6 +29,8 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.mtp.MtpDevice;
+import android.mtp.MtpObjectInfo;
 import android.os.Handler;
 import android.util.Log;
 
@@ -207,9 +211,12 @@ public class PtpUsbService implements PtpService {
             }
 
             if (device.getVendorId() == PtpConstants.CanonVendorId) {
+
+
+                //getObjectList(mtpDevice)
                 PtpUsbConnection connection = new PtpUsbConnection(usbManager.openDevice(device), in, out,
                         device.getVendorId(), device.getProductId());
-                camera = new EosCamera(connection, listener, new WorkerNotifier(context));
+                camera = new EosCamera(connection, listener, new WorkerNotifier(context), device);
             } else if (device.getVendorId() == PtpConstants.NikonVendorId) {
                 PtpUsbConnection connection = new PtpUsbConnection(usbManager.openDevice(device), in, out,
                         device.getVendorId(), device.getProductId());
@@ -224,5 +231,32 @@ public class PtpUsbService implements PtpService {
         }
 
         return false;
+    }
+
+    public List<MtpObjectInfo> getObjectList(MtpDevice device, int storageId, int objectHandle) {
+
+        if (device == null) {
+            return null;
+        }
+        if (objectHandle == 0) {
+            // all objects in root of storage
+            objectHandle = 0xFFFFFFFF;
+        }
+        int[] handles = device.getObjectHandles(storageId, 0, objectHandle);
+        if (handles == null) {
+            return null;
+        }
+
+        int length = handles.length;
+        ArrayList<MtpObjectInfo> objectList = new ArrayList<MtpObjectInfo>(length);
+        for (int i = 0; i < length; i++) {
+            MtpObjectInfo info = device.getObjectInfo(handles[i]);
+            if (info == null) {
+                Log.w(TAG, "getObjectInfo failed");
+            } else {
+                objectList.add(info);
+            }
+        }
+        return objectList;
     }
 }

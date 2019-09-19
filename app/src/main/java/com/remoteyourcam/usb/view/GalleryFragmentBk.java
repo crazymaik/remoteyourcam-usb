@@ -15,10 +15,6 @@
  */
 package com.remoteyourcam.usb.view;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -34,7 +30,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,17 +38,21 @@ import com.remoteyourcam.usb.ptp.Camera;
 import com.remoteyourcam.usb.ptp.PtpConstants;
 import com.remoteyourcam.usb.ptp.model.LiveViewData;
 import com.remoteyourcam.usb.ptp.model.ObjectInfo;
-import com.remoteyourcam.usb.view.GalleryAdapter.ViewHolder;
+import com.remoteyourcam.usb.view.GalleryAdapterBk.ViewHolder;
 
-public class GalleryFragment extends SessionFragment implements Camera.StorageInfoListener,
-        Camera.RetrieveImageInfoListener, ListView.OnScrollListener,
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class GalleryFragmentBk extends SessionFragmentBk implements Camera.StorageInfoListener,
+        Camera.RetrieveImageInfoListener, OnScrollListener,
         OnItemClickListener {
 
     private final Handler handler = new Handler();
     private Spinner storageSpinner;
     private StorageAdapter storageAdapter;
     private GridView galleryView;
-    private GalleryAdapter galleryAdapter;
+    private GalleryAdapterBk galleryAdapter;
     private CheckBox orderCheckbox;
 
     SimpleDateFormat formatParser;
@@ -77,7 +76,7 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
         emptyView.setText(getString(R.string.gallery_loading));
 
         galleryView = (GridView) view.findViewById(android.R.id.list);
-        galleryAdapter = new GalleryAdapter(getActivity(), this);
+        galleryAdapter = new GalleryAdapterBk(getActivity(), this);
         galleryAdapter.setReverseOrder(getSettings().isGalleryOrderReversed());
         galleryView.setAdapter(galleryAdapter);
         galleryView.setOnScrollListener(this);
@@ -209,7 +208,7 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
                     storageSpinner.setEnabled(false);
                 }
                 storageSpinner.setSelection(0);
-                camera().retrieveImageHandles(GalleryFragment.this, storageAdapter.getItemHandle(0),
+                camera().retrieveImageHandles(GalleryFragmentBk.this, storageAdapter.getItemHandle(0),
                         PtpConstants.ObjectFormat.EXIF_JPEG);
             }
         });
@@ -250,7 +249,7 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
                     if (child == null) {
                         continue;
                     }
-                    GalleryAdapter.ViewHolder holder = (GalleryAdapter.ViewHolder) child.getTag();
+                    ViewHolder holder = (ViewHolder) child.getTag();
                     if (holder.objectHandle == objectHandle) {
                         holder.image1.setImageBitmap(thumbnail);
                         holder.filename.setText(objectInfo.filename);
@@ -274,7 +273,7 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         currentScrollState = scrollState;
         switch (scrollState) {
-        case ListView.OnScrollListener.SCROLL_STATE_IDLE: {
+        case OnScrollListener.SCROLL_STATE_IDLE: {
             Camera camera = camera();
             if (!inStart || camera == null) {
                 break;
@@ -285,7 +284,7 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
                 if (child == null) {
                     continue;
                 }
-                GalleryAdapter.ViewHolder holder = (GalleryAdapter.ViewHolder) child.getTag();
+                ViewHolder holder = (ViewHolder) child.getTag();
                 if (!holder.done) {
                     holder.done = true;
                     camera.retrieveImageInfo(this, holder.objectHandle);
@@ -315,9 +314,9 @@ public class GalleryFragment extends SessionFragment implements Camera.StorageIn
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /*FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, PictureFragmentBk.newInstance(galleryAdapter.getItemHandle(position)), null);
         ft.addToBackStack(null);
-        ft.commit();*/
+        ft.commit();
     }
 }

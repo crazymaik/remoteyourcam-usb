@@ -15,18 +15,33 @@
  */
 package com.remoteyourcam.usb.view;
 
-import android.app.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.remoteyourcam.usb.AppSettings;
 import com.remoteyourcam.usb.ptp.Camera;
 
-public abstract class SessionActivity extends AppCompatActivity {
+public abstract class SessionFragmentBk extends BaseFragmentBk implements SessionView {
 
-    public abstract Camera getCamera();
+    protected boolean inStart;
 
-    public abstract void setSessionView(SessionView view);
+    protected Camera camera() {
+        if (getActivity() == null) {
+            return null;
+        }
+        return ((SessionActivity) getActivity()).getCamera();
+    }
 
-    public abstract AppSettings getSettings();
+    protected AppSettings getSettings() {
+        return ((SessionActivity) getActivity()).getSettings();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        inStart = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        inStart = false;
+    }
 }

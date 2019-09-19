@@ -15,7 +15,8 @@
  */
 package com.remoteyourcam.usb.view;
 
-import android.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 public class BaseFragment extends Fragment {
 

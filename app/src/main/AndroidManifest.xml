@@ -21,28 +21,15 @@
 
   <uses-feature android:name="android.hardware.usb.host"/>
 
-  <supports-screens
-    android:largeScreens="true"
-    android:normalScreens="true"
-    android:smallScreens="false"
-    android:xlargeScreens="true"/>
-
-  <!-- For Feedback -->
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <!-- For Acra -->
-  <uses-permission android:name="android.permission.INTERNET"/>
-
   <application
-    android:name="com.remoteyourcam.usb.RycApplication"
     android:icon="@drawable/icon"
     android:label="@string/app_name"
     android:largeHeap="true"
     android:theme="@style/Theme.RYC">
     <activity
-      android:name="com.remoteyourcam.usb.MainActivity"
+      android:name=".MainActivity"
       android:configChanges="orientation"
       android:label="@string/launcher_label"
-      android:launchMode="singleTask"
       android:screenOrientation="sensorLandscape">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -57,16 +44,11 @@
         android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
         android:resource="@xml/device_filter"/>
     </activity>
+    <activity android:name="com.remoteyourcam.usb.FilenameActivity" android:screenOrientation="portrait"/>
     <activity
       android:name="com.remoteyourcam.usb.activities.AppSettingsActivity"
       android:label="@string/activity_app_settings_title"
       android:screenOrientation="sensorLandscape"/>
-    <activity
-      android:name="org.acra.CrashReportDialog"
-      android:excludeFromRecents="true"
-      android:finishOnTaskLaunch="true"
-      android:launchMode="singleInstance"
-      android:theme="@android:style/Theme.Dialog"/>
   </application>
 
 </manifest>

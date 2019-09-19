@@ -15,6 +15,8 @@
  */
 package com.remoteyourcam.usb.ptp;
 
+import android.hardware.usb.UsbDevice;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +33,12 @@ import com.remoteyourcam.usb.ptp.model.LiveViewData;
 
 public class EosCamera extends PtpCamera {
 
-    public EosCamera(PtpUsbConnection connection, CameraListener listener, WorkerListener workerListener) {
+    public final UsbDevice device;
+
+    public EosCamera(PtpUsbConnection connection, CameraListener listener, WorkerListener workerListener, UsbDevice device) {
         super(connection, listener, workerListener);
+
+        this.device = device;
 
         addPropertyMapping(Camera.Property.ShutterSpeed, PtpConstants.Property.EosShutterSpeed);
         addPropertyMapping(Camera.Property.ApertureValue, PtpConstants.Property.EosApertureValue);
@@ -175,5 +181,9 @@ public class EosCamera extends PtpCamera {
     @Override
     public List<FocusPoint> getFocusPoints() {
         return new ArrayList<FocusPoint>();
+    }
+
+    public PtpUsbConnection getConnection() {
+        return connection;
     }
 }

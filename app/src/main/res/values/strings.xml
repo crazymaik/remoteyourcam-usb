@@ -17,8 +17,8 @@
 <resources>
 
   <!-- App specific, need to be overridden -->
-  <string name="app_name">Remote Your Cam USB</string>
-  <string name="launcher_label">RYC USB</string>
+  <string name="app_name">Meero instant shoot</string>
+  <string name="launcher_label">Meero instant shoot</string>
   <string name="ok">Ok</string>
   <string name="cancel">Cancel</string>
 
@@ -49,7 +49,7 @@
 
   <!-- no camera dialog -->
   <string name="dialog_no_camera_title">No camera found!</string>
-  <string name="dialog_no_camera_message">No compatible Canon or Nikon camera found. Is your camera connected via USB?</string>
+  <string name="dialog_no_camera_message">No compatible Canon or Nikon camera found. Check US or OTG connection?</string>
 
   <!-- changelog dialog -->
   <string name="whats_new">What\'s New</string>

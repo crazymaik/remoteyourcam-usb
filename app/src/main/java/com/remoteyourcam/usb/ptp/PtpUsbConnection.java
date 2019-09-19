@@ -18,10 +18,11 @@ package com.remoteyourcam.usb.ptp;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbRequest;
+import android.mtp.MtpDevice;
 
 public class PtpUsbConnection {
 
-    private final UsbDeviceConnection connection;
+    public final UsbDeviceConnection connection;
     private final UsbEndpoint bulkOut;
     private final UsbEndpoint bulkIn;
     private final int vendorId;
